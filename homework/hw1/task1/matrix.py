@@ -11,36 +11,35 @@ class Matrix:
         self.values = values
         self.dimension = (len(values), len(values[0]))
 
-    def __eq__(self, other: 'Matrix'):
-        if self.dimension != other.dimension:
+    def __eq__(self, other: object):
+        if isinstance(other, self.__class__):
+            if self.dimension != other.dimension:
+                return False
+            return self.values == other.values
+        else:
             return False
-        return self.values == other.values
 
-    def transpose(self) -> 'Matrix':
+    def transpose(self) -> "Matrix":
         new_values = []
         for i in range(self.dimension[0]):
-            current_row = [self.values[j][i] for j in
-                           range(self.dimension[1])]
+            current_row = [self.values[j][i] for j in range(self.dimension[1])]
             new_values.append(current_row)
         return Matrix(new_values)
 
-    def sum(self, matrix: 'Matrix') -> 'Matrix':
+    def sum(self, matrix: "Matrix") -> "Matrix":
         new_values = []
         for i in range(self.dimension[0]):
-            current_row = [self.values[i][j] + matrix.values[i][j] for j in
-                           range(self.dimension[1])]
+            current_row = [self.values[i][j] + matrix.values[i][j] for j in range(self.dimension[1])]
             new_values.append(current_row)
         return Matrix(new_values)
 
-    def dot(self, matrix: 'Matrix') -> 'Matrix':
+    def dot(self, matrix: "Matrix") -> "Matrix":
         if self.dimension[1] != matrix.dimension[0]:
             raise ValueError("Matrix have different dimensions")
         new_values = []
         for i in range(self.dimension[0]):
             current_row = []
             for k in range(matrix.dimension[1]):
-                current_row.append(sum(
-                    [self.values[i][j] * matrix.values[j][k] for j in
-                     range(self.dimension[1])]))
+                current_row.append(sum([self.values[i][j] * matrix.values[j][k] for j in range(self.dimension[1])]))
             new_values.append(current_row)
         return Matrix(new_values)
