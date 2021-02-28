@@ -8,7 +8,9 @@ def nl(file_name: str):
             for line in f:
                 if line == "\n":
                     continue
-                print(f"{count} {line.rstrip()}",)
+                print(
+                    f"{count} {line.rstrip()}",
+                )
                 count += 1
     except FileNotFoundError:
         print("No such file")
