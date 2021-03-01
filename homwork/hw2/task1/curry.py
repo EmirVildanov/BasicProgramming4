@@ -1,68 +1,63 @@
-import inspect
 from inspect import signature
 
 
-def test_function(arg1: int, arg2: str, arg3: str, *args):
-    return f"{arg1} {arg2} {arg3} {[arg for arg in args]}"
+def check_arity(fun, arity):
+    has_args = False
+    fun_parameters = signature(fun).parameters
+    fun_parameters_number = len(fun_parameters)
+    if "args" in fun_parameters:
+        has_args = True
+    if not has_args:
+        if fun_parameters_number < arity:
+            raise ValueError("Arity is bigger than fun arguments number")
+        elif fun_parameters_number > arity:
+            raise ValueError("Arity is smaller than fun arguments number")
+    elif arity < fun_parameters_number - 1:
+        raise ValueError("Arity is smaller than named functions arguments number")
 
 
-# print(signature(function))
-# print(type(signature(function)))
-# print(signature(function).parameters)
-# print(len(signature(function).parameters))
-
-
-def curry_explicit(function, arity):
-    if 'args' in signature(function).parameters:
-        function_named_args_number = len(signature(function).parameters) - 1
-    else:
-        function_named_args_number = len(signature(function).parameters)
+def curry_explicit(fun, arity, passed_args=None):
     if arity < 0:
-        raise ValueError("Negative arity")
-    elif arity < function_named_args_number:
-        raise ValueError("Passed wrong arity")
-    elif arity == 0:
-        return function
-    elif arity == 1:
-        return lambda x: function(x)
-    else:
-        return curry_explicit(function, arity - 1)
-
-
-def curry(fun, arity, passed_args=None):
+        raise ValueError("Arity can not be negative")
+    check_arity(fun, arity)
     if passed_args is None:
-        passed_args = [] # как бы глубже и глубже передаём наши агрументы до тех пор, пока
-        # переданные прежде в сумме с переданным в конце по длине не равны arity
+        passed_args = []
 
     def wrapper(*args):
+        if arity != 0 and len(args) != 1:
+            raise ValueError("Function with non null arity must have only one argument")
         cur_args = [*passed_args, *args]
-        if len(cur_args)< arity:
-            return curry(fun, arity, cur_args)
+        if len(cur_args) < arity:
+            return curry_explicit(fun, arity, cur_args)
         elif len(cur_args) == arity:
             return fun(*cur_args)
         else:
-            "too many args"
+            raise ValueError("Too many arguments")
+
     return wrapper
 
 
 def uncurry_explicit(function, arity):
-    if arity < 0:
-        raise ValueError("Negative arity")
-    if arity == 0:
-        return function()
-    elif arity == 1:
-        return lambda x: function(x)
-    elif arity == 2:
-        return lambda x, y: function(x)(y)
+    def returning_lambda(*args):
+        if len(args) < arity:
+            raise ValueError("Arity is bigger than passed arguments number")
+        elif len(args) > arity:
+            raise ValueError("Arity is smaller than passed arguments number")
+        args = list(args)
+        result = function
+        while len(args) != 0:
+            result = result(args[0])
+            del args[0]
+        return result
+
+    return returning_lambda
 
 
 if __name__ == "__main__":
     try:
-        test = curry(test_function, 3)
-        print(test(1)(2)(3)(4))
-        # f2 = curry_explicit((lambda x, y: f'<{x},{y}>'), 2)
-        # g2 = uncurry_explicit(f2, 2)
-        # print(f2(123)(456))
-        # print(g2(123, 456))
+        f2 = curry_explicit((lambda x, y: f"<{x},{y}>"), 2)
+        g2 = uncurry_explicit(f2, 2)
+        print(f2(123)(456))
+        print(g2(123, 456))
     except ValueError:
         print("Check the passing arity")
