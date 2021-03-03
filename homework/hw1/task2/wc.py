@@ -15,9 +15,7 @@ def wc(file_names: List[str]):
             total_lines += current_file_lines
             total_words += current_file_words
             total_bytes += current_file_bytes
-            print(
-                f"{current_file_lines}\t{current_file_words}\t{current_file_bytes}\t{filepath}"
-            )
+            print(f"{current_file_lines}\t{current_file_words}\t{current_file_bytes}\t{filepath}")
         except FileNotFoundError:
             print(f"No such file {filepath}")
     if len(file_names) > 1:
