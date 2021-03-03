@@ -10,7 +10,7 @@ class Vector:
     def dot(self, vector: "Vector") -> float:
         if vector.dimension != self.dimension:
             raise ValueError("Passed a vector of inappropriate length")
-        return sum([vector.coordinates[i] * self.coordinates[i] for i in range(self.dimension)])
+        return sum(x * y for x, y in zip(self.coordinates, vector.coordinates))
 
     def norm(self) -> float:
         return sqrt(self.dot(self))
