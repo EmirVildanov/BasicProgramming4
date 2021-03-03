@@ -9,9 +9,7 @@ class VectorTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             Vector([1, 1, 1]).dot(Vector([1, 1]))
 
-        self.assertTrue(
-            "Passed a vector of inappropriate length" in str(context.exception)
-        )
+        self.assertTrue("Passed a vector of inappropriate length" in str(context.exception))
 
     def test_should_dot_two_vectors(self):
         self.assertEqual(1, Vector([1, 1, 1]).dot(Vector([0, 0, 1])))

@@ -13,26 +13,17 @@ class Matrix:
         self.dimension = (len(values), len(values[0]))
 
     def __eq__(self, other: object):
-        if isinstance(other, self.__class__):
-            return self.values == other.values
-        else:
+        if not isinstance(other, self.__class__):
             return False
+        return self.values == other.values
 
     def transpose(self) -> "Matrix":
-        return Matrix(
-            [
-                [self.values[j][i] for j in range(self.dimension[0])]
-                for i in range(self.dimension[1])
-            ]
-        )
+        return Matrix([[self.values[j][i] for j in range(self.dimension[0])] for i in range(self.dimension[1])])
 
     def sum(self, matrix: "Matrix") -> "Matrix":
         return Matrix(
             [
-                [
-                    self.values[i][j] + matrix.values[i][j]
-                    for j in range(self.dimension[1])
-                ]
+                [self.values[i][j] + matrix.values[i][j] for j in range(self.dimension[1])]
                 for i in range(self.dimension[0])
             ]
         )
@@ -44,13 +35,8 @@ class Matrix:
             [
                 [
                     self_vector.dot(other_vector)
-                    for other_vector in (
-                        Vector([element for element in row])
-                        for row in matrix.transpose().values
-                    )
+                    for other_vector in (Vector([element for element in row]) for row in matrix.transpose().values)
                 ]
-                for self_vector in (
-                    Vector([element for element in row]) for row in self.values
-                )
+                for self_vector in (Vector([element for element in row]) for row in self.values)
             ]
         )

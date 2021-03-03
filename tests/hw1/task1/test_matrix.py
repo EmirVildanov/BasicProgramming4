@@ -10,9 +10,7 @@ class MatrixTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             Matrix([[1, 1, 1], [1, 1]])
 
-        self.assertTrue(
-            "Matrix rows must have the same length" in str(context.exception)
-        )
+        self.assertTrue("Matrix rows must have the same length" in str(context.exception))
 
     def test_should_raise_error_when_creating_empty_matrix(
         self,
@@ -36,24 +34,17 @@ class MatrixTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             matrix1.dot(matrix2)
 
-        self.assertTrue(
-            "These dimensions are incompatible for multiplication"
-            in str(context.exception)
-        )
+        self.assertTrue("These dimensions are incompatible for multiplication" in str(context.exception))
 
     def test_should_transpose_matrix(self):
         initial_matrix_values = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
         actual_matrix_values = [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
-        self.assertEqual(
-            Matrix(actual_matrix_values), Matrix(initial_matrix_values).transpose()
-        )
+        self.assertEqual(Matrix(actual_matrix_values), Matrix(initial_matrix_values).transpose())
 
     def test_should_transpose_matrix_2x3(self):
         initial_matrix_values = [[1, 2, 3], [4, 5, 6]]
         actual_matrix_values = [[1, 4], [2, 5], [3, 6]]
-        self.assertEqual(
-            Matrix(actual_matrix_values), Matrix(initial_matrix_values).transpose()
-        )
+        self.assertEqual(Matrix(actual_matrix_values), Matrix(initial_matrix_values).transpose())
 
     def test_should_sum_two_matrices(self):
         first_matrix_values = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
