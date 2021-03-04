@@ -9,11 +9,10 @@ def nl(file_names: List[str]):
             with open(filepath) as f:
                 for line in f:
                     if line.isspace():
-                        continue
-                    print(
-                        f"{count}\t{line.rstrip()}",
-                    )
-                    count += 1
+                        print(f"\t{line.rstrip()}")
+                    else:
+                        print(f"{count}\t{line.rstrip()}")
+                        count += 1
         except FileNotFoundError:
             print(f"No such file {filepath}")
 

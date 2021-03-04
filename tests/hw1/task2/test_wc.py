@@ -13,7 +13,7 @@ class WcTestCase(unittest.TestCase):
         self.assertEqual(mock_stdout.getvalue(), expected_output)
 
     def test_should_not_find_file(self):
-        file_name = "file_that_do_not_exist"
+        file_name = "file_that_does_not_exist"
         expected_output = f"No such file {os.path.join(RESOURCES_PATH, file_name)}\n"
         self.assert_stdout([os.path.join(RESOURCES_PATH, file_name)], expected_output)
 

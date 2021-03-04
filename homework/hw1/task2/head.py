@@ -22,6 +22,6 @@ if __name__ == "__main__":
         else:
             print("The number of lines should be an integer")
     elif len(sys.argv) > 3:
-        print("Too many arguments. Syntax: head.py [MAX_LINES_OPTION] [FILE_PATH]")
+        print("Too many arguments. Syntax: head.py [FILE_PATH] [MAX_LINES_OPTION]")
     else:
         print("Specify the path to the file")
