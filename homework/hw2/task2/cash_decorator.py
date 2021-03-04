@@ -1,6 +1,6 @@
 import functools
 from collections import OrderedDict
-from typing import Dict, Tuple, Callable
+from typing import Dict, Tuple, Callable, Any
 
 
 def make_arguments_list(args: Tuple, kwargs: Dict) -> Tuple:
@@ -9,10 +9,18 @@ def make_arguments_list(args: Tuple, kwargs: Dict) -> Tuple:
     :param kwargs: *kwargs of passing into decorator function
     :return: Tuple of constructed arguments list
     """
-    args = list(args)
+    full_arguments_list = list(args)
     for k, v in kwargs.items():
-        args.append((k, v))
-    return tuple(args)
+        full_arguments_list.append((k, v))
+    return tuple(full_arguments_list)
+
+
+class DecoratorFunction(Callable[[], Any]):
+    cash: OrderedDict = None
+    function_called_number: int = 0
+
+
+cash: DecoratorFunction
 
 
 def cash(func=None, *, n: int = 0) -> Callable:

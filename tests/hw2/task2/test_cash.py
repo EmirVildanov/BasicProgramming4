@@ -1,5 +1,4 @@
 import unittest.mock
-from typing import Tuple
 
 from homework.hw2.task2.cash_decorator import cash
 
@@ -50,8 +49,8 @@ class CashTestCase(unittest.TestCase):
 
     def test_should_cash_result_of_function_with_kwargs(self):
         @cash(n=3)
-        def custom_sum(a: int, b: int, **kwargs: str):
-            return sum([a, b, *kwargs.keys()])
+        def custom_sum(a: int, b: int, **kwargs):
+            return sum([a, b, *kwargs.values()])
 
         for i in range(3):
             custom_sum(1, 2, c=4, d=5)
