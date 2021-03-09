@@ -1,6 +1,6 @@
 import functools
 from collections import OrderedDict
-from typing import Dict, Tuple, Callable, Any
+from typing import Dict, Tuple, Callable, Any, Hashable
 
 
 def make_arguments_list(args: Tuple, kwargs: Dict) -> Tuple:
@@ -30,10 +30,10 @@ def cash(func=None, *, n: int = 0) -> Callable:
     :return: inner function
     """
     if func is None:
-        return lambda func: cash(func, n=n)
+        return lambda:  cash(func, n=n)
 
     @functools.wraps(func)
-    def inner(*args, **kwargs):
+    def inner(*args: Tuple[Hashable], **kwargs: Dict[Hashable, Hashable]):
         if make_arguments_list(args, kwargs) in inner.cash.keys():
             return inner.cash[make_arguments_list(args, kwargs)]
         arguments = make_arguments_list(args, kwargs)
