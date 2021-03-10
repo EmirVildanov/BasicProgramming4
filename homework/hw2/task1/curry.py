@@ -46,7 +46,7 @@ def curry_explicit(function: Callable, arity: int, passed_args: List = None) -> 
     :return: curried function
     """
     check_arity(function, arity)
-    passed_args = set(passed_args or [])
+    passed_args = passed_args or []
 
     def curried_function(*args):
         if arity != 0 and len(args) != 1:
