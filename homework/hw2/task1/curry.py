@@ -1,7 +1,21 @@
 import types
-from collections import Callable
-from inspect import signature
+from collections.abc import Callable
+from inspect import signature, getfullargspec
 from typing import List
+
+NEGATIVE_ARITY_ERROR_MESSAGE = "Arity can not be negative"
+BIGGER_ARITY_ERROR_MESSAGE = "Arity is bigger than fun arguments number"
+SMALLER_ARITY_ERROR_MESSAGE = "Arity is smaller than fun arguments number"
+POSITIONAL_ARGS_ARITY_INCOMPATIBILITY_ERROR_MESSAGE = "Arity is smaller than positional functions arguments number"
+FUNC_MULTIPLE_ARGS_ERROR_MESSAGE = "Curried function with non null arity must have only one argument on each step"
+ZERO_ARITY_ARGS_ERROR_MESSAGE = "Curried function with null arity must not have arguments"
+
+
+def check_arity_for_positional_parameters(arguments_number: int, arity: int):
+    if arguments_number < arity:
+        raise ValueError(BIGGER_ARITY_ERROR_MESSAGE)
+    elif arguments_number > arity:
+        raise ValueError(SMALLER_ARITY_ERROR_MESSAGE)
 
 
 def check_arity(function: Callable, arity: int):
@@ -12,21 +26,15 @@ def check_arity(function: Callable, arity: int):
     :return: None
     """
     if arity < 0:
-        raise ValueError("Arity can not be negative")
+        raise ValueError(NEGATIVE_ARITY_ERROR_MESSAGE)
     if isinstance(function, types.BuiltinFunctionType):
         return
-    has_args = False
     fun_parameters = signature(function).parameters
     fun_parameters_number = len(fun_parameters)
-    if "args" in fun_parameters:
-        has_args = True
-    if not has_args:
-        if fun_parameters_number < arity:
-            raise ValueError("Arity is bigger than fun arguments number")
-        elif fun_parameters_number > arity:
-            raise ValueError("Arity is smaller than fun arguments number")
+    if getfullargspec(function).varargs is None:
+        check_arity_for_positional_parameters(fun_parameters_number, arity)
     elif arity < fun_parameters_number - 1:
-        raise ValueError("Arity is smaller than positional functions arguments number")
+        raise ValueError(POSITIONAL_ARGS_ARITY_INCOMPATIBILITY_ERROR_MESSAGE)
 
 
 def curry_explicit(function: Callable, arity: int, passed_args: List = None) -> Callable:
@@ -38,14 +46,13 @@ def curry_explicit(function: Callable, arity: int, passed_args: List = None) -> 
     :return: curried function
     """
     check_arity(function, arity)
-    if passed_args is None:
-        passed_args = []
+    passed_args = set(passed_args or [])
 
     def curried_function(*args):
         if arity != 0 and len(args) != 1:
-            raise ValueError("Curried function with non null arity must have only one argument on each step")
+            raise ValueError(FUNC_MULTIPLE_ARGS_ERROR_MESSAGE)
         elif arity == 0 and len(args) != 0:
-            raise ValueError("Curried function with null arity must not have arguments")
+            raise ValueError(ZERO_ARITY_ARGS_ERROR_MESSAGE)
         cur_args = [*passed_args, *args]
         if len(cur_args) < arity:
             return curry_explicit(function, arity, cur_args)
@@ -63,13 +70,10 @@ def uncurry_explicit(function: Callable, arity: int) -> Callable:
     :return: uncurried function
     """
     if arity < 0:
-        raise ValueError("Arity can not be negative")
+        raise ValueError(NEGATIVE_ARITY_ERROR_MESSAGE)
 
     def uncurried_function(*args):
-        if len(args) < arity:
-            raise ValueError("Arity is bigger than passed arguments number")
-        elif len(args) > arity:
-            raise ValueError("Arity is smaller than passed arguments number")
+        check_arity_for_positional_parameters(len(args), arity)
         args = list(args)
         if arity == 0:
             return function()
