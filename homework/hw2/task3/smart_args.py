@@ -1,8 +1,7 @@
 import functools
 from collections.abc import Callable
-from inspect import signature, getfullargspec
+from inspect import signature
 from copy import deepcopy
-import random
 
 
 class Isolated:
@@ -36,9 +35,7 @@ def smart_args(func=None, *, positional_args_on: bool = False) -> Callable:
     :return: inner function with processed Isolated and Evaluated arguments
     """
     if func is None:
-        if positional_args_on:
-            return lambda func: smart_args(func, positional_args_on=True)
-        return lambda func: smart_args(func)
+        return lambda func: smart_args(func, positional_args_on=positional_args_on)
 
     @functools.wraps(func)
     def inner(*args, **kwargs):
