@@ -5,7 +5,6 @@ from tests.utils import extract_message_string_from_context
 
 
 class CurryTestCase(unittest.TestCase):
-
     def test_should_raise_error_when_negative_arity_is_passed_to_curry(self):
         with self.assertRaises(ValueError) as context:
             curry_explicit(lambda x: print(x), -1)
@@ -28,7 +27,9 @@ class CurryTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             curry_explicit(lambda x, y, *args: print(f"{x} {y} {args}"), 1)
 
-        self.assertTrue(POSITIONAL_ARGS_ARITY_INCOMPATIBILITY_ERROR_MESSAGE in extract_message_string_from_context(context))
+        self.assertTrue(
+            POSITIONAL_ARGS_ARITY_INCOMPATIBILITY_ERROR_MESSAGE in extract_message_string_from_context(context)
+        )
 
     def test_should_raise_error_when_function_with_0_arguments_take_some(self):
         with self.assertRaises(ValueError) as context:
@@ -42,9 +43,7 @@ class CurryTestCase(unittest.TestCase):
             curried_function = curry_explicit(lambda x, y: x + y, 2)
             curried_function(1, 2)
 
-        self.assertTrue(
-            FUNC_MULTIPLE_ARGS_ERROR_MESSAGE in extract_message_string_from_context(context)
-        )
+        self.assertTrue(FUNC_MULTIPLE_ARGS_ERROR_MESSAGE in extract_message_string_from_context(context))
 
     def test_should_curry_and_uncurry_example_functions(self):
         f2 = curry_explicit((lambda x, y: x + y), 2)
