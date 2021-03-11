@@ -86,3 +86,12 @@ class CacheTestCase(unittest.TestCase):
         custom_sum(5, 1, c=42, d=5)
         custom_sum(1, 2, c=4, d=5)
         self.assertEqual(4, custom_sum._function_called_number)
+
+    def test_should_check_that_function_under_wrapper_saves_its_info(self):
+        def custom_sum(a: int, b: int, *args: int, **kwargs):
+            return sum([a, b, *args, *kwargs.values()])
+
+        decorated_custom_sum = FunctionWithCache(custom_sum, 3)
+        self.assertEqual(decorated_custom_sum.__name__, custom_sum.__name__)
+        self.assertEqual(decorated_custom_sum.__doc__, custom_sum.__doc__)
+        self.assertEqual(decorated_custom_sum.__module__, custom_sum.__module__)

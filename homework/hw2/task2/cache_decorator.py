@@ -21,14 +21,15 @@ class FunctionWithCache:
         :param function: function to decorate
         :param cache_size: maximum size of wanted cache
         """
+        print(f"Function: {function}")
         if function is None:
-            self._function = lambda function: FunctionWithCache(function, cache_size=self._cache_size)
+            self._function = lambda function: FunctionWithCache(function, cache_size=cache_size)
         else:
             self._function = function
+            functools.update_wrapper(self, function)
         self._cache: OrderedDict = OrderedDict()
         self._cache_size = cache_size
         self._function_called_number = 0
-        functools.update_wrapper(self, function)
 
     def __call__(self, *args: Hashable, **kwargs: Hashable):
         if make_arguments_list(args, kwargs) in self._cache.keys():
