@@ -10,7 +10,7 @@ def make_arguments_list(args: Tuple, kwargs: Dict) -> Tuple:
     :return: Tuple of constructed arguments list
     """
     full_arguments_list = list(args)
-    for k, v in kwargs.items():
+    for k, v in sorted(kwargs.items()):
         full_arguments_list.append((k, v))
     return tuple(full_arguments_list)
 
