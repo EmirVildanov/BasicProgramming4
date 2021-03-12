@@ -1,6 +1,6 @@
 import functools
 from collections import OrderedDict
-from typing import Dict, Tuple, Callable, Any, Hashable
+from typing import Dict, Tuple, Callable, Hashable
 
 
 def make_arguments_list(args: Tuple, kwargs: Dict) -> Tuple:
@@ -21,7 +21,6 @@ class FunctionWithCache:
         :param function: function to decorate
         :param cache_size: maximum size of wanted cache
         """
-        print(f"Function: {function}")
         if function is None:
             self._function = lambda function: FunctionWithCache(function, cache_size=cache_size)
         else:
