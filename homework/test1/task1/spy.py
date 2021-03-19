@@ -1,7 +1,7 @@
 import functools
 import datetime
 from collections.abc import Callable, Hashable
-from typing import List, Tuple, Generator
+from typing import List, Tuple, Generator, Any
 
 
 class SpyFunction:
@@ -21,11 +21,15 @@ class SpyFunction:
         return self._function(*args, **kwargs)
 
 
+def get_history_generator(history: List[Tuple[Any, list]]) -> Generator:
+    for pair in history:
+        yield pair
+
+
 def print_usage_statistic(function: Callable) -> Generator:
     if not isinstance(function, SpyFunction):
-        print("Function type is not SpyFunction and it doesn't have needed fields ")
-    for pair in function.history:
-        yield pair
+        raise TypeError("Function type is not SpyFunction and it doesn't have needed fields ")
+    return get_history_generator(function.history)
 
 
 @SpyFunction
