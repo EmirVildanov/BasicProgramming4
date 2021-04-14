@@ -97,7 +97,8 @@ class Node(Generic[K, V]):
                 return False
             return key in self.right_child
         if self.left_child is None:
-            return key in self.left_child
+            return False
+        return key in self.left_child
 
     def __getitem__(self, key: K):
         if self.key == key:
@@ -122,7 +123,7 @@ class Node(Generic[K, V]):
             return Node(key, priority).merge(bigger_tree_node)
         return smaller_tree_node.merge(Node(key, priority)).merge(bigger_tree_node)
 
-    def remove(self, key: K) -> Node[K, V]:
+    def remove(self, key: K) -> Optional[Node[K, V]]:
         """
         Function that removes instance with [key] from Treap
         :param key: key of removing instance

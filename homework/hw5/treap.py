@@ -48,7 +48,9 @@ class Treap(MutableMapping):
         Function that removes instance form Trap by key
         :param key: key of removing instance
         """
-        value = self[key]
+        value: K = self[key]
+        if self.root is None:
+            raise KeyError(f"Treap does not contain key {key}")
         self.root = self.root.remove(key)
         self.keys.remove(key)
         self.values.remove(value)
@@ -70,9 +72,13 @@ class Treap(MutableMapping):
         return self.forward_iterator()
 
     def backward_iterator(self) -> Iterator[Tuple[K, V]]:
+        if self.root is None:
+            raise ValueError("Treap is empty")
         return self.root.backward_order()
 
     def forward_iterator(self) -> Iterator[Tuple[K, V]]:
+        if self.root is None:
+            raise ValueError("Treap is empty")
         return self.root.forward_order()
 
     def __len__(self):
