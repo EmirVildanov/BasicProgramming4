@@ -1,0 +1,6 @@
+class Comparable:
+    def __eq__(self, other):
+        ...
+
+    def __lt__(self, other):
+        ...
