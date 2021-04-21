@@ -9,4 +9,6 @@ wc, nl, head, tail**
 3. **Типы аргументов(декоратор)**
 ####[Hw3](https://datalore.jetbrains.com/notebook/c2yWWq4Y9oZHF1cKpupagE/cXaGcOnue30GXq0ztTta71/)
 1. **Анализ таблицы датасета [Титаник](https://www.kaggle.com/c/titanic/overview)**
-2. **Визуализация таблицы**
+2. **Визуализация таблицы**  
+####[Hw4](https://datalore.jetbrains.com/notebook/c2yWWq4Y9oZHF1cKpupagE/5CMsZtldJnsfGdY3Ufs3tW/)
+2. **Создание большой матрицы**
