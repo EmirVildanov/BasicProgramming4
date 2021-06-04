@@ -1,9 +1,9 @@
 ## Homework 
-#### [Hw1](https://github.com/EmirVildanov/BasicProgramming4/tree/master/homework/hw1)
+#### [Hw1](homework/hw1)
 1. **Реализовать функции для работы с векторами и матрицами**
 2. **Реализовать функции, имитирующие работу bash команд – 
 wc, nl, head, tail**
-#### [Hw2](https://github.com/EmirVildanov/BasicProgramming4/tree/master/homework/hw2)
+#### [Hw2](homework/hw2)
 1. **Каррирование**
 2. **Кэширование(декоратор)**
 3. **Типы аргументов(декоратор)**
@@ -14,5 +14,5 @@ wc, nl, head, tail**
 1. **Классификация набора ирисов**
 
 2. **Визуализация таблицы**
-#### [Hw7](https://github.com/EmirVildanov/BasicProgramming4/tree/master/homework/hw7)
+#### [Hw7](homework/hw7)
 1. **Face swapping на OpenCV. Сайт на Django**

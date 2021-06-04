@@ -10,7 +10,7 @@ pip install numpy
 pip install scipy
 ```
 
-2. Go to [mysite](https://github.com/EmirVildanov/BasicProgramming4/tree/master/homework/hw7/task1/mysite) folder
+2. Go to [mysite](mysite) folder
 
 3. Run server
 ```shell
