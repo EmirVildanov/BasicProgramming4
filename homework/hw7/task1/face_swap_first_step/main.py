@@ -1,10 +1,9 @@
-import os
 from typing import List, Tuple
 import numpy as np
 import cv2
 
-from homework.hw7.task1.constants import WHITE, RED, GREEN
-from homework.hw7.task1.face_swapper import FaceSwapper
+from homework.hw7.task1.face_swap_first_step.constants import RED, GREEN
+from homework.hw7.task1.face_swap_first_step.face_detector import FaceDetector
 
 
 def rect_contains_point(rect, point):
@@ -60,16 +59,14 @@ def get_bound_coordinates(points: List[Tuple[int, int]]) -> Tuple[int, int, int,
 
 
 if __name__ == "__main__":
-    face_swapper = FaceSwapper()
+    face_detector = FaceDetector()
 
-    # first_face = cv2.imread("photos/Me.jpg")
-    first_face = cv2.imread("photos/meCropped.jpg")
+    first_face = cv2.imread("photos/boy.jpg")
     first_face_template = first_face.copy()
     first_face_gray = cv2.cvtColor(first_face_template, cv2.COLOR_BGR2GRAY)
     first_face_info = [first_face_template, first_face_gray]
 
-    # second_face = cv2.imread("photos/Liza.png")
-    second_face = cv2.imread("photos/lizaCropped.jpg")
+    second_face = cv2.imread("photos/girl.jpg")
     second_face_template = second_face.copy()
     second_face_gray = cv2.cvtColor(second_face, cv2.COLOR_BGR2GRAY)
     second_face_info = [second_face_template, second_face_gray]
@@ -80,8 +77,8 @@ if __name__ == "__main__":
         template = face[0]
         gray = face[1]
 
-        faces = face_swapper.face_detector.detectMultiScale(gray)
-        _, landmarks = face_swapper.face_landmark_detector.fit(gray, faces)
+        faces = face_detector.face_detector.detectMultiScale(gray)
+        _, landmarks = face_detector.face_landmark_detector.fit(gray, faces)
 
         points = []
         for landmark in landmarks:
@@ -186,8 +183,8 @@ if __name__ == "__main__":
         cv2.fillConvexPoly(result, get_triangle_points(faces_triples[0][2][i]),
                            1)
         faces_triples[0][0][y_min:y_max, x_min:x_max] = result
-        if i == 0:
-            break
+        # if i == 0:
+        #     break
 
     for index, face_triple in enumerate(faces_triples):
         # template = face_triple[0]
