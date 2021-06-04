@@ -131,8 +131,8 @@ if __name__ == "__main__":
         draw_face_point(second_face_template, p, GREEN)
     faces_triples.append([morphed_image, morphed_points, morphed_triangle_list])
 
-    first_image_to_morphed_affine_transforms = []
-    second_image_to_morphed_affine_transforms = []
+    first_image_to_morphed_affine_transforms: List[None] = []
+    second_image_to_morphed_affine_transforms: List[None] = []
 
     min_triangles_number = min(len(faces_triples[0][2]), len(faces_triples[1][2]), len(morphed_triangle_list))  # COSTYL
 
