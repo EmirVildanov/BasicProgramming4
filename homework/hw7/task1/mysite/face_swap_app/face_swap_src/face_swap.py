@@ -6,7 +6,7 @@ import logging
 
 # 3D Transform
 def bilinear_interpolate(img, coords):
-    """ Interpolates over every image channel
+    """Interpolates over every image channel
     http://en.wikipedia.org/wiki/Bilinear_interpolation
     :param img: max 3 channel image
     :param coords: 2 x _m_ array. 1st row = xcoords, 2nd row = ycoords
@@ -30,7 +30,7 @@ def bilinear_interpolate(img, coords):
 
 
 def grid_coordinates(points):
-    """ x,y grid coordinates within the ROI of supplied points
+    """x,y grid coordinates within the ROI of supplied points
     :param points: points to generate grid coordinates
     :returns: array of (x, y) coordinates
     """
@@ -39,8 +39,7 @@ def grid_coordinates(points):
     ymin = int(np.min(points[:, 1]))
     ymax = int(np.max(points[:, 1]) + 1)
 
-    return np.asarray([(x, y) for y in range(ymin, ymax)
-                       for x in range(xmin, xmax)], np.uint32)
+    return np.asarray([(x, y) for y in range(ymin, ymax) for x in range(xmin, xmax)], np.uint32)
 
 
 def process_warp(src_img, result_img, tri_affines, dst_points, delaunay):
@@ -55,8 +54,7 @@ def process_warp(src_img, result_img, tri_affines, dst_points, delaunay):
     for simplex_index in range(len(delaunay.simplices)):
         coords = roi_coords[roi_tri_indices == simplex_index]
         num_coords = len(coords)
-        out_coords = np.dot(tri_affines[simplex_index],
-                            np.vstack((coords.T, np.ones(num_coords))))
+        out_coords = np.dot(tri_affines[simplex_index], np.vstack((coords.T, np.ones(num_coords))))
         x, y = coords.T
         result_img[y, x] = bilinear_interpolate(src_img, out_coords)
 
@@ -85,8 +83,7 @@ def warp_image_3d(src_img, src_points, dst_points, dst_shape, dtype=np.uint8):
     result_img = np.zeros((rows, cols, 3), dtype=dtype)
 
     delaunay = spatial.Delaunay(dst_points)
-    tri_affines = np.asarray(list(triangular_affine_matrices(
-        delaunay.simplices, src_points, dst_points)))
+    tri_affines = np.asarray(list(triangular_affine_matrices(delaunay.simplices, src_points, dst_points)))
 
     process_warp(src_img, result_img, tri_affines, dst_points, delaunay)
 
@@ -111,19 +108,16 @@ def transformation_from_points(points1, points2):
     U, S, Vt = np.linalg.svd(np.dot(points1.T, points2))
     R = (np.dot(U, Vt)).T
 
-    return np.vstack([np.hstack([s2 / s1 * R,
-                                 (c2.T - np.dot(s2 / s1 * R, c1.T))[:, np.newaxis]]),
-                      np.array([[0., 0., 1.]])])
+    return np.vstack(
+        [np.hstack([s2 / s1 * R, (c2.T - np.dot(s2 / s1 * R, c1.T))[:, np.newaxis]]), np.array([[0.0, 0.0, 1.0]])]
+    )
 
 
 def warp_image_2d(im, M, dshape):
     output_im = np.zeros(dshape, dtype=im.dtype)
-    cv2.warpAffine(im,
-                   M[:2],
-                   (dshape[1], dshape[0]),
-                   dst=output_im,
-                   borderMode=cv2.BORDER_TRANSPARENT,
-                   flags=cv2.WARP_INVERSE_MAP)
+    cv2.warpAffine(
+        im, M[:2], (dshape[1], dshape[0]), dst=output_im, borderMode=cv2.BORDER_TRANSPARENT, flags=cv2.WARP_INVERSE_MAP
+    )
 
     return output_im
 
@@ -149,8 +143,8 @@ def correct_colours(im1, im2, landmarks1):
     RIGHT_EYE_POINTS = list(range(36, 42))
 
     blur_amount = COLOUR_CORRECT_BLUR_FRAC * np.linalg.norm(
-        np.mean(landmarks1[LEFT_EYE_POINTS], axis=0) -
-        np.mean(landmarks1[RIGHT_EYE_POINTS], axis=0))
+        np.mean(landmarks1[LEFT_EYE_POINTS], axis=0) - np.mean(landmarks1[RIGHT_EYE_POINTS], axis=0)
+    )
     blur_amount = int(blur_amount)
     if blur_amount % 2 == 0:
         blur_amount += 1
@@ -169,7 +163,7 @@ def correct_colours(im1, im2, landmarks1):
 
 # Copy-and-paste
 def apply_mask(img, mask):
-    """ Apply mask to supplied image
+    """Apply mask to supplied image
     :param img: max 3 channel image
     :param mask: [0-255] values in mask
     :returns: new image with mask applied
@@ -217,8 +211,9 @@ def face_swap(src_face, dst_face, src_points, dst_points, dst_shape, dst_img, en
     # 2d warp
     if warp_2d:
         unwarped_src_face = warp_image_3d(warped_src_face, dst_points[:end], src_points[:end], src_face.shape[:2])
-        warped_src_face = warp_image_2d(unwarped_src_face, transformation_from_points(dst_points, src_points),
-                                        (h, w, 3))
+        warped_src_face = warp_image_2d(
+            unwarped_src_face, transformation_from_points(dst_points, src_points), (h, w, 3)
+        )
 
         mask = mask_from_points((h, w), dst_points)
         mask_src = np.mean(warped_src_face, axis=2) > 0
@@ -229,11 +224,11 @@ def face_swap(src_face, dst_face, src_points, dst_points, dst_shape, dst_img, en
     mask = cv2.erode(mask, kernel, iterations=1)
     # Poisson Blending
     r = cv2.boundingRect(mask)
-    center = ((r[0] + int(r[2] / 2), r[1] + int(r[3] / 2)))
+    center = (r[0] + int(r[2] / 2), r[1] + int(r[3] / 2))
     output = cv2.seamlessClone(warped_src_face, dst_face, mask, center, cv2.NORMAL_CLONE)
 
     x, y, w, h = dst_shape
     dst_img_cp = dst_img.copy()
-    dst_img_cp[y:y + h, x:x + w] = output
+    dst_img_cp[y : y + h, x : x + w] = output
 
     return dst_img_cp

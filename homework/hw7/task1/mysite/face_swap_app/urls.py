@@ -4,13 +4,11 @@ from django.conf.urls.static import static
 
 from . import views
 
-app_name = 'face_swap_app'
+app_name = "face_swap_app"
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('image_upload', views.image_view, name='image_upload'),
-    path('success', views.success, name='success'),
+    path("", views.index, name="index"),
+    path("result", views.result, name="result"),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

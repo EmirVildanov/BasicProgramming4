@@ -16,3 +16,5 @@ pip install scipy
 ```shell
 python manage.py runserver
 ```
+
+4. Go to http://127.0.0.1:8000/face_swap_app/
