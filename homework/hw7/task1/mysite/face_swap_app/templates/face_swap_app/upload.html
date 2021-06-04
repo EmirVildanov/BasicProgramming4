@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image load</title>
+
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'face_app_swap/style.css' %}">
+</head>
+<body>
+    <form method = "post" enctype="multipart/form-data">
+        {% csrf_token %}
+        Load first image:
+        {{ form.as_p }}
+<!--        Load second image:-->
+<!--        {{ form.as_p }}-->
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
