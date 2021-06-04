@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Images</title>
+
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'face_swap_app/style.css' %}">
+</head>
+<body>
+    <div>
+        {% if success %}
+            <div>
+                Congratulations! You did it! Here is your prize:
+            </div>
+        {% else %}
+            <div>
+                Here is a result of your photo face swapped with our hidden man:
+            </div>
+        {% endif %}
+
+        {% if failure %}
+            <div class="alert">
+                I am sorry. You have to try again
+            </div>
+        {% endif %}
+        <div class="images-container">
+            <img src="media/images/uploaded_image.jpg" />
+            {% if success %}
+                <img src="media/images/FirstOnSecond.jpg" />
+            {% endif %}
+            <img src="media/images/SecondOnFirst.jpg" />
+        </div>
+
+        {% if success %}
+            <a href="{% url 'face_swap_app:index' %}">Try again?</a>
+        {% else %}
+            <div>
+                Your task now is to define who is a mysterious stranger. Enter his surname:
+            </div>
+            <form method = "post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+            <button type="submit">Upload</button>
+        {% endif %}
+    </form>
+    </div>
+</body>
+</html>

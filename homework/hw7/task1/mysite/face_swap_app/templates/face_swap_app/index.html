@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image load</title>
+
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'face_swap_app/style.css' %}">
+</head>
+<body>
+    <div>
+        <div>
+            You may wonder why you can upload only ONE image if the app's goal is to swap faces.
+        </div>
+
+        <div>
+            But do it.
+        </div>
+
+        <div>
+            You will get answers, just go further.
+        </div>
+        <form method = "post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload</button>
+        </form>
+
+        {% if error_message %}
+            <div class="alert">
+                {{ error_message }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
