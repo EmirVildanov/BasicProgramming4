@@ -147,9 +147,11 @@ if __name__ == "__main__":
         # print("End")
 
         first_image_to_morphed_affine_transforms.append(
-            cv2.getAffineTransform(first_image_triangles_points, morphed_image_triangles_points))
+            cv2.getAffineTransform(first_image_triangles_points, morphed_image_triangles_points)
+        )
         first_image_to_morphed_affine_transforms.append(
-            cv2.getAffineTransform(second_image_triangles_points, morphed_image_triangles_points))
+            cv2.getAffineTransform(second_image_triangles_points, morphed_image_triangles_points)
+        )
 
     for i in range(min_triangles_number):
         x_min, x_max, y_min, y_max = get_bound_coordinates(get_triangle_points(faces_triples[0][2][i]))
@@ -171,17 +173,15 @@ if __name__ == "__main__":
             # print(cropped)
         # result = cv2.warpAffine(cropped, first_image_to_morphed_affine_transforms[i],
         #                         (cropped.shape[1], cropped.shape[0]))
-        test = np.array([[ -0.98666667, 2.26666667, 0], [ -1.70666667, 1.86666667, 0]])
-        result = cv2.warpAffine(cropped, test,
-                                (cropped.shape[1], cropped.shape[0]))
+        test = np.array([[-0.98666667, 2.26666667, 0], [-1.70666667, 1.86666667, 0]])
+        result = cv2.warpAffine(cropped, test, (cropped.shape[1], cropped.shape[0]))
         print("Affine:")
         print(first_image_to_morphed_affine_transforms[i])
         print("Result:")
         print(result)
         cv2.imshow("Result", result)
 
-        cv2.fillConvexPoly(result, get_triangle_points(faces_triples[0][2][i]),
-                           1)
+        cv2.fillConvexPoly(result, get_triangle_points(faces_triples[0][2][i]), 1)
         faces_triples[0][0][y_min:y_max, x_min:x_max] = result
         # if i == 0:
         #     break
@@ -194,7 +194,8 @@ if __name__ == "__main__":
         # resized = cv2.resize(cropped, (500, 500))
         # face_triple[0] = resized
         cv2.imshow(f"{index}", face_triple[0])
-        if index == 0: break
+        if index == 0:
+            break
 
     # morphed_image = cv2.addWeighted(faces_triples[0][0], alfa, faces_triples[1][0], 1 - alfa, 0)
     # cv2.imshow(f"Result", morphed_image)

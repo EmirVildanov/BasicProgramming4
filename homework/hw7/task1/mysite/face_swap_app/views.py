@@ -20,8 +20,9 @@ def index(request):
                 handle_uploaded_file(request.FILES)
             except RuntimeError:
                 print(sys.exc_info()[1])
-                error_message = "Your image does not contain face or contains more than one face. Please load another " \
-                                "image. "
+                error_message = (
+                    "Your image does not contain face or contains more than one face. Please load another " "image. "
+                )
                 return render(request, "face_swap_app/index.html", {"form": form, "error_message": error_message})
             return HttpResponseRedirect(reverse("face_swap_app:result"))
     else:
